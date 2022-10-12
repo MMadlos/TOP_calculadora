@@ -8,6 +8,8 @@
     --bg-web-color: #FFF8B5;
     --bg-calc: #FEFCFF;
     --bg-teclas: #F4F3F9;
+    --bg-teclas-operadores: #DDE1F9;
+    --bg-teclas-especiales: #FFD7F9;
     --main-text: #343434;
     --font-text: 'Inter', sans-serif;
 
@@ -28,15 +30,16 @@ body {
     border: 8px solid var(--main-text);
     box-shadow: 16px 16px 0px 0px rgba(0, 0, 0, 0.25);
     border-radius: 18px;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 1fr 2fr;
 }
 
+/* INTERIOR CALCULADORA */ 
+/* Pantalla */
 .pantalla {
     background-color: var(--bg-teclas);
     border-radius: 18px 18px 75px 75px;
     text-align: right;
-    height: 30%;
     padding-top: 40px;
     padding-right: 40px;
 }
@@ -49,4 +52,52 @@ body {
 .operacionAnterior {
     font-size: 40px;
     opacity: 0.5;
+}
+
+/* Botones */
+.teclado {
+    padding: 40px;
+    font-size: 40px;
+    font-weight: 800;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+}
+.teclas > div {
+    width: 120px;
+    height: 80px;
+    border-radius: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.numeros {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.numeros > div {
+    background-color: var(--bg-teclas);
+}
+
+.operadores {
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+    gap: 24px;
+
+}
+
+.operadores > div {
+    background-color: var(--bg-teclas-operadores);
+}
+
+.especiales {
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+    gap: 24px;
+
+}
+.especiales > div {
+    background-color: var(--bg-teclas-especiales);
 }
