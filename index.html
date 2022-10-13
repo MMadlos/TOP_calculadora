@@ -9,32 +9,33 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800;900&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script>
 
 </head>
 <body>
     <div class="contenedorCalc">
         <div class="pantalla">
-            <p class="resultado">32 x 75 = 2.400</p>
-            <p class="operacionAnterior">16 x 2 = 32</p>
+            <p id="resultadoActual" class="operacionActual">0</p>
+            <p id="resultadoAnterior" class="operacionAnterior">16 x 2 = 32</p>
         </div>
         <div class="teclado">
-            <div class="numeros teclas">
-                <div>0</div>
-                <div>1</div>
-                <div>2</div>
-                <div>3</div>
-                <div>4</div>
-                <div>5</div>
-                <div>6</div>
-                <div>7</div>
-                <div>8</div>
+            <div id="tecladoNumerico" class="numeros teclas">
                 <div>9</div>
+                <div>8</div>
+                <div>7</div>
+                <div>6</div>
+                <div>5</div>
+                <div>4</div>
+                <div>3</div>
+                <div>2</div>
+                <div>1</div>
+                <div>0</div>
                 <div>,</div>
-                <div>=</div>
+                <div id="resultado">=</div>
             </div>
             <div class="operadores teclas">
                 <div>/</div>
-                <div>*</div>
+                <div>x</div>
                 <div>-</div>
                 <div>+</div>
             </div>
