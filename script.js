@@ -1,6 +1,6 @@
 // Operations
 
-const add = (a, b = 0) => a + b;
+const add = (a = 0, b = 0) => a + b;
 const substract = (a, b) => a - b;
 const multiply = (a, b) => a * b;
 const divide = (a, b) => a / b;
@@ -43,16 +43,22 @@ tecladoNumerico.forEach(tecla => {
         if (tecla.textContent == "=") {              
             return                
         }
-        
-        // Ver si tiene una coma para no poder añadir más comas
 
-        if(value.includes(",") && tecla.textContent == ",") {
-            alert("There's already a comma")
+        if (tecla.textContent == "," && value.length == 0){
+            value = "0,";
+            pantalla.textContent += value;
             return
         }
 
+        if(value.includes(",") && tecla.textContent == ",") {
+            alert("There's already a comma")
+            return //Si no añado el return, se imprime la ","
+        }
+        
         value += tecla.textContent;
         pantalla.textContent += tecla.textContent;
+
+
     })
 })
 
@@ -60,17 +66,43 @@ tecladoNumerico.forEach(tecla => {
 
 // Ejemplo particular con la suma
 suma.addEventListener("click", () => { 
-    valoresOperacion.push(Number(value.replace(",", ".")));
-    pantalla.textContent += suma.textContent;
+    if (pantalla.textContent.includes(suma.textContent)){
+        return
+    } else {
+        valoresOperacion.push(Number(value.replace(",", ".")));
+        pantalla.textContent += suma.textContent;
+        
+        value = "";
+    }
+
     
-    value = "";
 
 })
 
 // Funcinoalidad de la tecla "=" con la suma
 resultado.addEventListener("click", () => {
     valoresOperacion.push(Number(value.replace(",", ".")));
-    resultadoOperacion = operator(add(valoresOperacion[0], valoresOperacion[1]))
+
+    // Contar decimales de los valores
+    function getDecimalLength(num) {
+        const numStr = String(num);
+        if (numStr.includes(".")){
+            return numStr.split(".")[1].length
+        }
+
+        return 0;
+    }
+    
+
+    primerValor = getDecimalLength(valoresOperacion[0])
+    segundoValor = getDecimalLength(valoresOperacion[1])
+
+    function getMaxLength(a, b = 0) {
+        return (a > b) ? a : b;
+    }
+
+    resultadoOperacion = add(valoresOperacion[0], valoresOperacion[1]).toFixed(getMaxLength(primerValor, segundoValor));
+
     pantalla.textContent += resultado.textContent + String(resultadoOperacion).replace(".", ",");
 
     valoresOperacion = [];
@@ -78,6 +110,3 @@ resultado.addEventListener("click", () => {
     wasClicked = true;
 
 })
-
-
-//TEST
