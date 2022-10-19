@@ -1,12 +1,3 @@
-// Operations
-
-/* const add = (a = 0, b = 0) => a + b;
-const substract = (a, b) => a - b;
-const multiply = (a, b) => a * b;
-const divide = (a, b) => a / b;
-
-let operator = operate => operate; */
-
 // Variables globales
 const pantalla = document.getElementById("resultadoActual");
 const tecladoNumerico = document.querySelectorAll("#tecladoNumerico > div")
@@ -18,7 +9,6 @@ let resultadoOperacion; // Para mostrar en pantalla
 
 
 // FUNCIONES
-
 // Guarda los valores seleccionados en el array y los muestra en pantalla.
 tecladoNumerico.forEach(tecla => {    
     tecla.addEventListener("click", () => {
@@ -63,71 +53,78 @@ tecladoNumerico.forEach(tecla => {
     })
 })
 
-
-
-// Ejemplo particular con la suma
-const suma = document.getElementById("suma")
-
-// suma.addEventListener("click", () => { 
-//     if (pantalla.textContent.includes(suma.textContent)){
-//         return
-//     } else {
-//         valoresOperacion.push(Number(value.replace(",", ".")));
-//         pantalla.textContent = String(valoresOperacion[0]).replace(".", ",") + suma.textContent;
-        
-//         value = "";
-//     }
-// })
-
-// FALTA GENERALIZAR AL RESTO DE OPERACIONES
+// Funciones de operaciones
 const add = (a = 0, b = 0) => a + b;
 const substract = (a, b) => a - b;
 const multiply = (a, b) => a * b;
 const divide = (a, b) => a / b;
 
-let operator = operate => operate;
+// let operator = operate => operate;
+function operator (operate, a, b) {
+    return operate(a, b);
+}
 
+console.log(operator(add, 2, 3));
+
+// Operadores
 const operadores = document.querySelectorAll(".operadores > div")
+const suma = document.getElementById("suma")
+
 let operacionSeleccionada;
+
+function convertToNumber(string){
+    return Number(string.replace(",", "."));
+}
+
+function convertToString(number){
+    return String(number).replace(".", ",")
+}
+
 
 operadores.forEach(tecla => {
     tecla.addEventListener("click", () => {
-        if(tecla.id == "suma"){
-            if (!pantalla.textContent.includes(suma.textContent)){
-                valoresOperacion.push(Number(value.replace(",", ".")));
-                pantalla.textContent = String(valoresOperacion[0]).replace(".", ",") + suma.textContent;                
-                value = "";
-                operacionSeleccionada = "suma"
-            }
+        if(tecla.id == "suma" && !pantalla.textContent.includes(tecla.textContent )){
+            valoresOperacion.push(convertToNumber(value));
+            pantalla.textContent = convertToString(valoresOperacion[0]) + suma.textContent;                
+            value = "";
+            operacionSeleccionada = tecla.id
         }
-        if(tecla.id == "resta"){
-            if (!pantalla.textContent.includes(suma.textContent)){
-                valoresOperacion.push(Number(value.replace(",", ".")));
-                pantalla.textContent = String(valoresOperacion[0]).replace(".", ",") + resta.textContent;                
-                value = "";
-                operacionSeleccionada = "resta"
-            }
+        if(tecla.id == "resta" && !pantalla.textContent.includes(resta.textContent)){
+            valoresOperacion.push(convertToNumber(value));
+            pantalla.textContent = convertToString(valoresOperacion[0]) + resta.textContent;                
+            value = "";
+            operacionSeleccionada = tecla.id
+        }
+        if(tecla.id == "multiplicacion" && !pantalla.textContent.includes(multiplicacion.textContent)){
+            valoresOperacion.push(convertToNumber(value));
+            pantalla.textContent = convertToString(valoresOperacion[0]) + multiplicacion.textContent;                
+            value = "";
+            operacionSeleccionada = tecla.id
+        }
+        if(tecla.id == "division" && !pantalla.textContent.includes(division.textContent)){
+            valoresOperacion.push(convertToNumber(value));
+            pantalla.textContent = convertToString(valoresOperacion[0]) + division.textContent;                
+            value = "";
+            operacionSeleccionada = tecla.id
         }
     })
 })
 
 // Funcinoalidad de la tecla "=" con la suma
 const resultado = document.getElementById("resultado")
-
 resultado.addEventListener("click", () => {
-    valoresOperacion.push(Number(value.replace(",", ".")));
+    valoresOperacion.push(convertToNumber(value));
 
-    // Contar decimales de los valores
+    // Cuenta los decimales de los valores y los utiliza como máximo para el resultado
     function getDecimalLength(num) {
         const numStr = String(num);
         if (numStr.includes(".")){
             return numStr.split(".")[1].length
         }
-
         return 0;
     }
     
-    function getMaxLength(a, b = 0) {
+    function getMaxLength(a, b) {
         return (a > b) ? a : b;
     }
 
@@ -135,15 +132,23 @@ resultado.addEventListener("click", () => {
     const segundoValor = getDecimalLength(valoresOperacion[1])
     const maxLength = getMaxLength(primerValor, segundoValor);
 
-    if (operacionSeleccionada == "suma"){
-        resultadoOperacion = add(valoresOperacion[0], valoresOperacion[1]).toFixed(maxLength);
+    //Operaciones en función de la tecla seleccionada
+    switch (operacionSeleccionada){
+        case "suma":
+            resultadoOperacion = operator(add, valoresOperacion[0], valoresOperacion[1]).toFixed(maxLength);
+            break;
+        case "resta":
+            resultadoOperacion = substract(valoresOperacion[0], valoresOperacion[1]).toFixed(maxLength);
+            break;
+        case "multiplicacion":
+            resultadoOperacion = multiply(valoresOperacion[0], valoresOperacion[1]).toFixed(maxLength);
+            break;
+        case "division":
+            resultadoOperacion = divide(valoresOperacion[0], valoresOperacion[1]).toFixed(maxLength);
+            break;
     }
 
-    if (operacionSeleccionada == "resta"){
-        resultadoOperacion = substract(valoresOperacion[0], valoresOperacion[1]).toFixed(maxLength);
-    }
-
-
+    //Muestra resultado final en pantalla y resetea variables
     pantalla.textContent += resultado.textContent + String(resultadoOperacion).replace(".", ",");
     valoresOperacion = [];
     value = "";
@@ -151,7 +156,7 @@ resultado.addEventListener("click", () => {
 
 })
 
-// Botón borrar todo
+// Borra todas las variables
 const btnAC = document.getElementById("btnAllClear")
 btnAC.addEventListener("click", () => {
     value = undefined;
