@@ -64,7 +64,6 @@ function operator (operate, a, b) {
     return operate(a, b);
 }
 
-console.log(operator(add, 2, 3));
 
 // Operadores
 const operadores = document.querySelectorAll(".operadores > div")
@@ -81,32 +80,20 @@ function convertToString(number){
 }
 
 
+
+
 operadores.forEach(tecla => {
     tecla.addEventListener("click", () => {
-        if(tecla.id == "suma" && !pantalla.textContent.includes(tecla.textContent )){
-            valoresOperacion.push(convertToNumber(value));
-            pantalla.textContent = convertToString(valoresOperacion[0]) + suma.textContent;                
-            value = "";
-            operacionSeleccionada = tecla.id
+        if (pantalla.textContent.includes(tecla.textContent)){
+            return
         }
-        if(tecla.id == "resta" && !pantalla.textContent.includes(resta.textContent)){
+        function processOperation(operacion){
             valoresOperacion.push(convertToNumber(value));
-            pantalla.textContent = convertToString(valoresOperacion[0]) + resta.textContent;                
+            pantalla.textContent = convertToString(valoresOperacion[0]) + tecla.textContent;                
             value = "";
-            operacionSeleccionada = tecla.id
+            operacionSeleccionada = operacion
         }
-        if(tecla.id == "multiplicacion" && !pantalla.textContent.includes(multiplicacion.textContent)){
-            valoresOperacion.push(convertToNumber(value));
-            pantalla.textContent = convertToString(valoresOperacion[0]) + multiplicacion.textContent;                
-            value = "";
-            operacionSeleccionada = tecla.id
-        }
-        if(tecla.id == "division" && !pantalla.textContent.includes(division.textContent)){
-            valoresOperacion.push(convertToNumber(value));
-            pantalla.textContent = convertToString(valoresOperacion[0]) + division.textContent;                
-            value = "";
-            operacionSeleccionada = tecla.id
-        }
+        processOperation(tecla.id);
     })
 })
 
