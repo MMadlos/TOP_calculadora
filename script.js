@@ -53,24 +53,7 @@ tecladoNumerico.forEach(tecla => {
     })
 })
 
-// Funciones de operaciones
-const add = (a = 0, b = 0) => a + b;
-const substract = (a, b) => a - b;
-const multiply = (a, b) => a * b;
-const divide = (a, b) => a / b;
-
-// let operator = operate => operate;
-function operator (operate, a, b) {
-    return operate(a, b);
-}
-
-
-// Operadores
-const operadores = document.querySelectorAll(".operadores > div")
-const suma = document.getElementById("suma")
-
-let operacionSeleccionada;
-
+// Conversores
 function convertToNumber(string){
     return Number(string.replace(",", "."));
 }
@@ -79,14 +62,16 @@ function convertToString(number){
     return String(number).replace(".", ",")
 }
 
-
-
+// Operadores
+let operacionSeleccionada;
+const operadores = document.querySelectorAll(".operadores > div")
 
 operadores.forEach(tecla => {
     tecla.addEventListener("click", () => {
         if (pantalla.textContent.includes(tecla.textContent)){
             return
         }
+
         function processOperation(operacion){
             valoresOperacion.push(convertToNumber(value));
             pantalla.textContent = convertToString(valoresOperacion[0]) + tecla.textContent;                
@@ -97,7 +82,13 @@ operadores.forEach(tecla => {
     })
 })
 
-// Funcinoalidad de la tecla "=" con la suma
+// Funciones de operaciones
+const add = (a = 0, b = 0) => a + b;
+const substract = (a, b) => a - b;
+const multiply = (a, b) => a * b;
+const divide = (a, b) => a / b;
+
+// Funcinoalidad de la tecla "="
 const resultado = document.getElementById("resultado")
 resultado.addEventListener("click", () => {
     valoresOperacion.push(convertToNumber(value));
@@ -115,28 +106,27 @@ resultado.addEventListener("click", () => {
         return (a > b) ? a : b;
     }
 
-    const primerValor = getDecimalLength(valoresOperacion[0])
-    const segundoValor = getDecimalLength(valoresOperacion[1])
-    const maxLength = getMaxLength(primerValor, segundoValor);
+    const primerValorOp = valoresOperacion[0]
+    const segundoValorOp = valoresOperacion[1]
+
+    const primerValorLength = getDecimalLength(primerValorOp)
+    const segundoValorLength = getDecimalLength(segundoValorOp)
+    const maxLength = getMaxLength(primerValorLength, segundoValorLength);
 
     //Operaciones en función de la tecla seleccionada
-    switch (operacionSeleccionada){
-        case "suma":
-            resultadoOperacion = operator(add, valoresOperacion[0], valoresOperacion[1]).toFixed(maxLength);
-            break;
-        case "resta":
-            resultadoOperacion = substract(valoresOperacion[0], valoresOperacion[1]).toFixed(maxLength);
-            break;
-        case "multiplicacion":
-            resultadoOperacion = multiply(valoresOperacion[0], valoresOperacion[1]).toFixed(maxLength);
-            break;
-        case "division":
-            resultadoOperacion = divide(valoresOperacion[0], valoresOperacion[1]).toFixed(maxLength);
-            break;
+    function operateValues(operation){
+        resultadoOperacion = operation(primerValorOp, segundoValorOp).toFixed(maxLength);
     }
 
+    (operacionSeleccionada == "suma") ? operateValues(add)
+    : (operacionSeleccionada == "resta") ? operateValues(substract)
+    : (operacionSeleccionada == "multiplicacion") ? operateValues(multiply)
+    : (operacionSeleccionada == "division") ? operateValues(divide)
+    : "";
+
+    
     //Muestra resultado final en pantalla y resetea variables
-    pantalla.textContent += resultado.textContent + String(resultadoOperacion).replace(".", ",");
+    pantalla.textContent += resultado.textContent + convertToString(resultadoOperacion);
     valoresOperacion = [];
     value = "";
     wasClicked = true;
