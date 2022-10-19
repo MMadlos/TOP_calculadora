@@ -77,6 +77,7 @@ body {
     justify-content: center;
     padding: 8px 16px;
 }
+
 .numeros {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -85,6 +86,10 @@ body {
 
 .numeros > div {
     background-color: var(--bg-teclas);
+}
+
+.numeros > div:hover {
+    background-color: #cccccc
 }
 
 .operadores {
@@ -98,6 +103,10 @@ body {
     background-color: var(--bg-teclas-operadores);
 }
 
+.operadores > div:hover {
+    background-color: #bcc0d6;
+}
+
 .especiales {
     display: grid;
     grid-template-rows: repeat(4, 1fr);
@@ -106,4 +115,7 @@ body {
 }
 .especiales > div {
     background-color: var(--bg-teclas-especiales);
+}
+.especiales > div:hover {
+    background-color: #fac7c9;
 }
