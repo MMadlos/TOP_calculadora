@@ -94,7 +94,7 @@ resultado.addEventListener("click", () => {
     valoresOperacion.push(convertToNumber(value));
 
     // Cuenta los decimales de los valores y los utiliza como máximo para el resultado
-    function getDecimalLength(num) {
+    function getDecimalLength(num = 0) {
         const numStr = String(num);
         if (numStr.includes(".")){
             return numStr.split(".")[1].length
@@ -122,8 +122,7 @@ resultado.addEventListener("click", () => {
     : (operacionSeleccionada == "resta") ? operateValues(substract)
     : (operacionSeleccionada == "multiplicacion") ? operateValues(multiply)
     : (operacionSeleccionada == "division") ? operateValues(divide)
-    : "";
-
+    : resultadoOperacion = value; //If "=" is pressed after an operator
     
     //Muestra resultado final en pantalla y resetea variables
     pantalla.textContent += resultado.textContent + convertToString(resultadoOperacion);
