@@ -3,9 +3,9 @@ const pantalla = document.getElementById("resultadoActual");
 const tecladoNumerico = document.querySelectorAll("#tecladoNumerico > div")
 
 let wasClicked = false; // Para saber si ha pulsado "=" y empezar una nueva operación
-let value; // Para guardar el valor para la operación
-let valoresOperacion = []; // Para guardar los números a operar
-let resultadoOperacion; // Para mostrar en pantalla
+let value; // Guarda el valor para la operación
+let valoresOperacion = []; // Guarda los números a operar
+let resultadoOperacion; // Muestra resultado en pantalla
 
 
 // FUNCIONES
@@ -25,8 +25,8 @@ tecladoNumerico.forEach(tecla => {
         //Evita que se añadan varios "0" al principio
         if (value == "" && tecla.textContent == "0") {
             pantalla.textContent = ""
-
         }
+
         if (value == "0" && tecla.textContent == "0") {
             return
         }
@@ -48,8 +48,6 @@ tecladoNumerico.forEach(tecla => {
         
         value += tecla.textContent;
         pantalla.textContent += tecla.textContent;
-
-
     })
 })
 
@@ -65,6 +63,7 @@ function convertToString(number){
 // Operadores
 let operacionSeleccionada;
 const operadores = document.querySelectorAll(".operadores > div")
+let simbolo;
 
 operadores.forEach(tecla => {
     tecla.addEventListener("click", () => {
@@ -79,6 +78,7 @@ operadores.forEach(tecla => {
             operacionSeleccionada = operacion
         }
         processOperation(tecla.id);
+        simbolo = tecla.textContent;
     })
 })
 
@@ -88,36 +88,44 @@ const substract = (a, b) => a - b;
 const multiply = (a, b) => a * b;
 const divide = (a, b) => a / b;
 
-// Funcinoalidad de la tecla "="
+// Funcionalidad de la tecla "="
 const resultado = document.getElementById("resultado")
 resultado.addEventListener("click", () => {
     valoresOperacion.push(convertToNumber(value));
 
-    // Cuenta los decimales de los valores y los utiliza como máximo para el resultado
-    function getDecimalLength(num = 0) {
-        const numStr = String(num);
-        if (numStr.includes(".")){
-            return numStr.split(".")[1].length
-        }
-        return 0;
-    }
-    
-    function getMaxLength(a, b) {
-        return (a > b) ? a : b;
-    }
-
     const primerValorOp = valoresOperacion[0]
     const segundoValorOp = valoresOperacion[1]
-
-    const primerValorLength = getDecimalLength(primerValorOp)
-    const segundoValorLength = getDecimalLength(segundoValorOp)
-    const maxLength = getMaxLength(primerValorLength, segundoValorLength);
-
-    //Operaciones en función de la tecla seleccionada
+    
     function operateValues(operation){
-        resultadoOperacion = operation(primerValorOp, segundoValorOp).toFixed(maxLength);
-    }
+        if (operation == multiply || operation == divide){
+            resultadoOperacion = parseFloat(operation(primerValorOp, segundoValorOp).toFixed(5));
 
+        } else {
+            function getMaxDecimalLength(value1, value2){
+                function getDecimalLength(num) {
+                    const numStr = String(num);
+                    if (numStr.includes(".")){
+                        return numStr.split(".")[1].length
+                    }
+                    return 0;
+                }
+        
+                primerValor = getDecimalLength(value1)
+                segundoValor = getDecimalLength(value2)
+        
+                return (primerValor > segundoValor) ? primerValor : segundoValor;        
+            }
+
+            const maxLength = getMaxDecimalLength(primerValorOp, segundoValorOp)        
+            resultadoOperacion = operation(primerValorOp, segundoValorOp).toFixed(maxLength);
+        }
+    }
+    
+    //Operaciones en función de la tecla seleccionada
+    if (operacionSeleccionada == undefined) {
+        return pantalla.textContent = "0";
+    } 
+    
     (operacionSeleccionada == "suma") ? operateValues(add)
     : (operacionSeleccionada == "resta") ? operateValues(substract)
     : (operacionSeleccionada == "multiplicacion") ? operateValues(multiply)
@@ -125,7 +133,7 @@ resultado.addEventListener("click", () => {
     : resultadoOperacion = value; //If "=" is pressed after an operator
     
     //Muestra resultado final en pantalla y resetea variables
-    pantalla.textContent += resultado.textContent + convertToString(resultadoOperacion);
+    pantalla.textContent = convertToString(primerValorOp) + simbolo + convertToString(segundoValorOp) + resultado.textContent + convertToString(resultadoOperacion);
     valoresOperacion = [];
     value = "";
     wasClicked = true;
