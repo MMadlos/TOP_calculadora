@@ -32,7 +32,7 @@ let result = "";
 tecladoNumerico.forEach(tecla => {
     tecla.addEventListener("click", () => {  
         if (tecla.id == "equal_key") {return}  
-        if (pantalla.textContent == "0" ) {pantalla.textContent = ""}
+        if (pantalla.textContent == "0" ){pantalla.textContent = ""}
         if (numsToOperate[0]){
             displayValue += tecla.textContent
             pantalla.textContent += tecla.textContent
@@ -55,16 +55,20 @@ let operator = "";
 tecladoOperadores.forEach(tecla => {
     tecla.addEventListener("click", () => {
         if (simbolo){
-            numsToOperate[1] = convertToNumber(displayValue);
-            makeOperation()
+            if (!displayValue){
+                pantalla.textContent = pantalla.textContent.slice(0, -1);
+            } else {
+                numsToOperate[1] = convertToNumber(displayValue);
+                makeOperation()
+                
+                pantalla.textContent = result;
             
-            pantalla.textContent = result;
-        
-            operacionRealizada.textContent = numsToOperate[0] + simbolo + numsToOperate[1] + "=" + result
-            displayValue = "";
-            simbolo = "";    
-            operator = "";
-            numsToOperate[0] = result;
+                operacionRealizada.textContent = numsToOperate[0] + simbolo + numsToOperate[1] + "=" + result
+                displayValue = "";
+                simbolo = "";    
+                operator = "";
+                numsToOperate[0] = result;
+            }            
         }
 
         if (result){
@@ -166,9 +170,14 @@ btnAC.addEventListener("click", () => {
 const btnErase = document.getElementById("btnErase")
 btnErase.addEventListener("click", () => {
     if (!displayValue){return}
-
-    displayValue = displayValue.slice(0, -1);
-    pantalla.textContent = pantalla.textContent.slice(0, -1);
+    if (pantalla.textContent.length == 1){
+        displayValue = ""
+        pantalla.textContent = "0"
+    }
+    else {
+        displayValue = displayValue.slice(0, -1);
+        pantalla.textContent = pantalla.textContent.slice(0, -1);
+    }   
 })
 
 // ---- TEST ---- //
