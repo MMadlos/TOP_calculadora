@@ -80,8 +80,8 @@ tecladoOperadores.forEach(tecla => {
 
         // Conversor en función de la tecla seleccionada
         (operacionSeleccionada == "suma") ? operator = add
-        : (operacionSeleccionada == "resta") ? operator =substract
-        : (operacionSeleccionada == "multiplicacion") ? operator =multiply
+        : (operacionSeleccionada == "resta") ? operator = substract
+        : (operacionSeleccionada == "multiplicacion") ? operator = multiply
         : (operacionSeleccionada == "division") ? operator = divide
         : operator = add; //If "=" is pressed before an operator
 
@@ -105,9 +105,30 @@ equalKey.addEventListener("click", () => {
     // Añado el valor a operar
     numsToOperate[1] = convertToNumber(displayValue)
 
-    result = operate(operator, numsToOperate[0], numsToOperate[1])
+    if (operator == multiply || operator == divide) {
+        result = parseFloat(operate(operator, numsToOperate[0], numsToOperate[1]).toFixed(5))
+    } else {
+        function getMaxDecimalLength(value1, value2){
+            
+            function getDecimalLength(num) {
+                const numStr = String(num);
+                if (numStr.includes(".")){
+                    return numStr.split(".")[1].length
+                }
+                return 0;
+            }
+    
+            firstNum = getDecimalLength(value1)
+            secondNum = getDecimalLength(value2)
+    
+            return (firstNum > secondNum) ? firstNum : secondNum;        
+        }
+ 
+        const maxLength = getMaxDecimalLength(numsToOperate[0], numsToOperate[1])
+        result = parseFloat(operate(operator, numsToOperate[0], numsToOperate[1]).toFixed(maxLength))
+    }
 
-    // Display result and operation
+
     pantalla.textContent = convertToString(result);
     operacionRealizada.textContent 
         = convertToString(numsToOperate[0]) 
@@ -126,6 +147,18 @@ equalKey.addEventListener("click", () => {
     simbolo = "";
 })
 
+// Decimales. 
+// - Si es una suma o una resta, utiliza el número de decimales introducido por el usuario.
+// - Si es una multiplicación o división, redondea o aplica un máximo de 5 desimales.
+function operateValues(operation){
+    if (operation == multiply || operation == divide){
+        resultadoOperacion = parseFloat(operation(primerValorOp, segundoValorOp).toFixed(5));
+
+    } else {
+        
+    }
+}
+
 // All Clear button
 const btnAC = document.getElementById("btnAllClear")
 btnAC.addEventListener("click", () => {
@@ -142,14 +175,6 @@ btnAC.addEventListener("click", () => {
 })
 
 // ---- TEST ---- //
-/* 
-
-let array = [2]
-array[1] = 4;
-array[1] = 8;
-console.log(array) // Resultado: [2, 8]
-
- */
 
 // ------------------------------------------------------------- //
 // const pantalla = document.getElementById("resultadoActual");
