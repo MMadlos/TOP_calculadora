@@ -9,14 +9,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800;900&display=swap" rel="stylesheet">
-    <script src="script.js" defer></script>
+    <script src="script.js" async="false" defer></script>
 
 </head>
 <body>
     <div class="contenedorCalc">
         <div class="pantalla">
-            <p id="resultadoActual" class="operacionActual">0</p>
             <p id="resultadoAnterior" class="operacionAnterior"></p>
+            <p id="resultadoActual" class="operacionActual"></p>
         </div>
         <div class="teclado">
             <div id="tecladoNumerico" class="numeros teclas">
@@ -31,7 +31,7 @@
                 <div>1</div>
                 <div>0</div>
                 <div>,</div>
-                <div id="resultado">=</div>
+                <div id="equal_key">=</div>
             </div>
             <div class="operadores teclas">
                 <div id="division">/</div>
