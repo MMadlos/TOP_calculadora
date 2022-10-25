@@ -112,6 +112,22 @@ equalKey.addEventListener("click", () => {
     numsToOperate[1] = convertToNumber(displayValue)
     makeOperation()
 
+    if(result == Infinity){
+
+        displayValue = "";
+        numsToOperate = [];
+        result = "";
+    
+        operacionSeleccionada = ""
+        simbolo = "";
+        operator = "";
+    
+        pantalla.textContent = "0";
+        operacionRealizada.textContent = "";
+
+        return alert("If you divide the number to 0, this calculator will autodestroy.") 
+    }
+
     pantalla.textContent = convertToString(result);
     operacionRealizada.textContent 
         = convertToString(numsToOperate[0]) 

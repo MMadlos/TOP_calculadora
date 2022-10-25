@@ -20,13 +20,12 @@ body {
     font-family: var(--font-text);
     color: var(--main-text);
     letter-spacing: -0.025em;
-    padding: 40px;
 }
 
 .contenedorCalc {
     background-color: var(--bg-calc);
-    height: min(788px, 90vh);
-    width: min(814px, 80vw);
+    height: min(788px, 100vh);
+    width: min(814px, 100vw);
     margin: auto;
     border: 8px solid var(--main-text);
     box-shadow: 16px 16px 0px 0px rgba(0, 0, 0, 0.2);
