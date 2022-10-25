@@ -33,10 +33,12 @@ tecladoNumerico.forEach(tecla => {
     tecla.addEventListener("click", () => {  
         if (tecla.id == "equal_key") {return}  
         if (pantalla.textContent == "0" ){pantalla.textContent = ""}
+        if (displayValue.includes(",") && tecla.textContent == ",") {return alert("There's already a comma")}
         if (numsToOperate[0]){
             displayValue += tecla.textContent
             pantalla.textContent += tecla.textContent
         } else {
+            result = ""
             displayValue += tecla.textContent
             pantalla.textContent = displayValue
         }        
