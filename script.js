@@ -4,10 +4,9 @@ const add = (a = 0, b = 0) => a + b;
 const substract = (a, b) => a - b;
 const multiply = (a, b) => a * b;
 const divide = (a, b) => a / b;
-
 const operate = (operator = add, a , b) => operator(a, b);
 
-// // Conversores
+// Conversores
 function convertToNumber(string){
     return Number(string.replace(",", "."));
 }
@@ -16,32 +15,34 @@ function convertToString(number){
     return String(number).replace(".", ",")
 }
 
-
 // Cuando selecciono un número, lo muestro en pantalla
 
 const pantalla = document.getElementById("resultadoActual");
 const operacionRealizada = document.getElementById("resultadoAnterior");
 const tecladoNumerico = document.querySelectorAll("#tecladoNumerico > div")
 
-pantalla.textContent = "0";
-
 let displayValue = "";
 let numsToOperate = [];
 let result = "";
 
+function processTecladoNumerico(key) {  
+    if (key == "=") {return}  
+    if (pantalla.textContent == "0" ){pantalla.textContent = ""}
+    if (displayValue.includes(",") && key == ",") {return alert("There's already a comma")}
+    if (numsToOperate[0]){
+        displayValue += key;
+        pantalla.textContent += key
+    } else {
+        result = ""
+        displayValue += key;
+        pantalla.textContent = displayValue 
+    }            
+}
+
+pantalla.textContent = "0";
 tecladoNumerico.forEach(tecla => {
-    tecla.addEventListener("click", () => {  
-        if (tecla.id == "equal_key") {return}  
-        if (pantalla.textContent == "0" ){pantalla.textContent = ""}
-        if (displayValue.includes(",") && tecla.textContent == ",") {return alert("There's already a comma")}
-        if (numsToOperate[0]){
-            displayValue += tecla.textContent;
-            pantalla.textContent += tecla.textContent
-        } else {
-            result = ""
-            displayValue += tecla.textContent;
-            pantalla.textContent = displayValue 
-        }        
+    tecla.addEventListener("click", () => { 
+        processTecladoNumerico(tecla.textContent) 
     })
 })
 
@@ -199,122 +200,93 @@ btnErase.addEventListener("click", () => {
 })
 
 // Key events
+const arrayTecladoNumerico = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."]
+const arrayOperadores = ["+", "-", "/", "*"]
 let keyPressed;
+
 
 window.addEventListener("keydown", (event) =>  {
     keyPressed = event.key
 
-    switch(keyPressed){
-        case "1":
-        case "2":
-        case "3":
-        case "4":
-        case "5":
-        case "6":
-        case "7":
-        case "8":
-        case "9":
-        case "0":
-        case ".":
-            if (keyPressed == ".") {keyPressed = ","}
-            if (pantalla.textContent == "0" ){pantalla.textContent = ""}
-            if (displayValue.includes(",") && keyPressed == ",") {return alert("There's already a comma")}
-            if (numsToOperate[0]){
-                displayValue += keyPressed
-                pantalla.textContent += keyPressed
+    if (arrayTecladoNumerico.includes(keyPressed)){
+        if (keyPressed == ".") {keyPressed = ","}
+        processTecladoNumerico(keyPressed)
+    }
+
+    if (arrayOperadores.includes(keyPressed)){
+        if (simbolo){
+            if (!displayValue){
+                pantalla.textContent = pantalla.textContent.slice(0, -1);
             } else {
-                result = ""
-                displayValue += keyPressed
-                pantalla.textContent = displayValue
-            }
-            break;
-        case "+":
-        case "-":
-        case "/":
-        case "*":
-            if (simbolo){
-                if (!displayValue){
-                    pantalla.textContent = pantalla.textContent.slice(0, -1);
-                } else {
-                    numsToOperate[1] = convertToNumber(displayValue);
-                    makeOperation()
-                    
-                    pantalla.textContent = result;
+                numsToOperate[1] = convertToNumber(displayValue);
+                makeOperation()
                 
-                    operacionRealizada.textContent = numsToOperate[0] + simbolo + numsToOperate[1] + "=" + result
-                    displayValue = "";
-                    simbolo = "";    
-                    operator = "";
-                    numsToOperate[0] = result;
-                }            
-            }
-    
-            if (result){
-                numsToOperate[0] = result
-                result = ""
-            }
-                
-            // Guarda el valor a operar        
-            else {numsToOperate[0] = convertToNumber(displayValue)};
-    
-            // Cuando haga click, selecciono el operador
-            operacionSeleccionada = keyPressed;
-    
-            // Conversor en función de la tecla seleccionada
-            (operacionSeleccionada == "+") ? operator = add
-            : (operacionSeleccionada == "-") ? operator = substract
-            : (operacionSeleccionada == "*") ? operator = multiply
-            : (operacionSeleccionada == "/") ? operator = divide
-            : operator = add; //If "=" is pressed before an operator
-    
-    
-            // Muestro el operador en pantalla y guardo el símbolo de la operación
-            simbolo = keyPressed
-            pantalla.textContent += keyPressed;
-    
-    
-            // Reset del valor a guardar
-            displayValue = "";
-            break;
-        case "Enter":
-            if (displayValue == undefined || displayValue == ""){return}
-            if (!operacionSeleccionada){return}
-
-            // Añado el valor a operar
-            numsToOperate[1] = convertToNumber(displayValue)
-            makeOperation()
-
-            if(result == Infinity){
-
+                pantalla.textContent = result;
+            
+                operacionRealizada.textContent = numsToOperate[0] + simbolo + numsToOperate[1] + "=" + result
                 displayValue = "";
-                numsToOperate = [];
-                result = "";
-            
-                operacionSeleccionada = ""
-                simbolo = "";
+                simbolo = "";    
                 operator = "";
-            
-                pantalla.textContent = "0";
-                operacionRealizada.textContent = "";
+                numsToOperate[0] = result;
+            }            
+        }
 
-                return alert("If you divide the number to 0, this calculator will autodestroy.") 
-            }
+        if (result){
+            numsToOperate[0] = result
+            result = ""
+        } else {numsToOperate[0] = convertToNumber(displayValue)};
 
-            pantalla.textContent = convertToString(result);
-            operacionRealizada.textContent 
-                = convertToString(numsToOperate[0]) 
-                + simbolo 
-                + convertToString(numsToOperate[1]) 
-                + "=" 
-                + convertToString(result);
+        operacionSeleccionada = keyPressed;
+        (operacionSeleccionada == "+") ? operator = add
+        : (operacionSeleccionada == "-") ? operator = substract
+        : (operacionSeleccionada == "*") ? operator = multiply
+        : (operacionSeleccionada == "/") ? operator = divide
+        : operator = add; //If "=" is pressed before an operator
 
-            // Update variables
+        // Muestro el operador en pantalla y guardo el símbolo de la operación
+        simbolo = keyPressed
+        pantalla.textContent += keyPressed;
+        displayValue = "";
+    }
+
+    if (keyPressed == "Enter"){
+        if (displayValue == undefined || displayValue == ""){return}
+        if (!operacionSeleccionada){return}
+
+        // Añado el valor a operar
+        numsToOperate[1] = convertToNumber(displayValue)
+        makeOperation()
+
+        if(result == Infinity){
+
             displayValue = "";
             numsToOperate = [];
-            operacionSeleccionada = "";
-            operator = "";
+            result = "";
+        
+            operacionSeleccionada = ""
             simbolo = "";
-            break;
+            operator = "";
+        
+            pantalla.textContent = "0";
+            operacionRealizada.textContent = "";
+
+            return alert("If you divide the number to 0, this calculator will autodestroy.") 
+        }
+
+        pantalla.textContent = convertToString(result);
+        operacionRealizada.textContent 
+            = convertToString(numsToOperate[0]) 
+            + simbolo 
+            + convertToString(numsToOperate[1]) 
+            + "=" 
+            + convertToString(result);
+
+        // Update variables
+        displayValue = "";
+        numsToOperate = [];
+        operacionSeleccionada = "";
+        operator = "";
+        simbolo = "";
     }
 
 })
